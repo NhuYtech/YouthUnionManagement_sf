@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Điểm danh hoạt động{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_index') }}">Đoàn phí</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_new') }}">Điểm danh hoạt động đoàn</a></li>
+</ol>
+
+<h5 style="display: block; text-align: center; color: black;"><b>Thêm điểm danh</b></h5>
+
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="row mt-3">
+        <div class="col-auto">
+            <button class="btn btn-success btn-sm">
+                <i class="fas fa-save"></i> {{ button_label|default('Lưu') }}
+            </button>
+        </div>
+        <div class="col-auto">
+            <a href="{{ path('app_event_roll_call_index') }}" class="btn btn-warning btn-sm">Trở lại</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

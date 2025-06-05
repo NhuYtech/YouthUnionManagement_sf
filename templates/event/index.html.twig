@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quản lý hoạt động{% endblock %}
+
+{% block content %}
+
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_index') }}">Hoạt động đoàn</a>   </li>
+        </ol>
+
+        <h5><b style="color: black;">Danh sách hoạt động</b></h5>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <!--Nút Thêm-->
+        <a href="{{ path('app_event_new') }}" class="btn btn-primary btn-sm shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50"></i> Thêm
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- BẢNG -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên hoạt động</th>
+                            <th>Loại hoạt động</th>
+                            <th>Cấp tổ chức</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>Địa điểm</th>
+                            <th>Hình ảnh</th>
+                            <th>Mô tả</th>
+                            <th>Thời gian điểm danh</th>
+                            <th>Giới hạn người tham gia</th>
+                            <th>Đăng ký tham gia</th>
+                            <th>File đính kèm</th>
+                            <th>Trạng thái</th>
+                            <th>Tiện ích</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if events is defined and events|length > 0 %}
+                            {% for event in events %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ event.eventName }}</td>
+                                    <td>{{ event.eventType }}</td>
+                                    <td>{{ event.organizationLevel }}</td>
+                                    <td>{{ event.startDate ? event.startDate|date('d/m/Y H:i') : '---' }}</td>
+                                    <td>{{ event.endDate ? event.endDate|date('d/m/Y H:i') : '---' }}</td>
+                                    <td>{{ event.location }}</td>
+                                    <td>
+                                        {% if event.image %}
+                                            <a href="{{ asset('uploads/events/' ~ event.image) }}" target="_blank">
+                                                <img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Event image" width="50">
+                                            </a>
+                                        {% else %}
+                                            ---
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span title="{{ event.description }}">
+                                            {{ event.description|length > 30 ? event.description|slice(0, 30) ~ '...' : event.description }}
+                                        </span>
+                                    </td>
+                                    <td>{{ event.rollCallTime ? event.rollCallTime|date('H:i') : '---' }}</td>
+                                    <td>{{ event.participantLimit }}</td>
+                                    <td>
+                                        {% if event.registerLink
+                                            and date('now') >= event.startDate
+                                            and date('now') <= event.endDate
+                                        %}
+                                            <a href="{{ event.registerLink }}" target="_blank" class="register-link">Link đăng ký</a>
+                                        {% else %}
+                                            <span class="badge badge-secondary">Đóng đăng ký</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if event.pdfFileName %}
+                                            <a href="{{ asset('uploads/pdfs/' ~ event.pdfFileName) }}" target="_blank">
+                                                <i class="fas fa-file-pdf text-danger"></i> Xem file
+                                            </a>
+                                        {% else %}
+                                            ---
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set now = "now"|date('Y-m-d H:i:s') %}
+                                    
+                                        {% if now < event.startDate|date('Y-m-d H:i:s') %}
+                                            <span class="badge badge-warning">Chưa diễn ra</span>
+                                        {% elseif now >= event.startDate|date('Y-m-d H:i:s') and now <= event.endDate|date('Y-m-d H:i:s') %}
+                                            <span class="badge badge-primary">Đang diễn ra</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">Đã kết thúc</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <a href="{{ path('app_event_show', {'id': event.id}) }}"
+                                            title="Chi tiết"
+                                            class="btn btn-sm btn-primary mb-1">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            </a>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                            <a href="{{ path('app_event_edit', {'id': event.id}) }}"
+                                            title="Chỉnh sửa"
+                                            class="btn btn-sm btn-info">
+                                            <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="14" class="text-center">Không có dữ liệu</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

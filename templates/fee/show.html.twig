@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết đoàn phí{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_fee_index') }}">Đoàn phí</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_fee_edit', {'id': fee.id}) }}">Chi tiết đoàn phí</a></li>
+</ol>
+
+<h5><b style="color: black; text-align: center;">Chi tiết đoàn phí</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>STT</th>
+                <td>{{ fee.id }}</td>
+            </tr>
+            <tr>
+                <th>Tên đơn vị</th>
+                <td>{{ fee.user.unitName }}</td>
+            </tr>
+            <tr>
+                <th>Họ tên người đóng</th>
+                <td>{{ fee.user.fullName }}</td>
+            </tr>
+            <tr>
+                <th>Số thành viên</th>
+                <td>{{ fee.memberCount }}</td>
+            </tr>
+            <tr>
+                <th>Tổng tiền</th>
+                <td>{{ fee.amount }}</td>
+            </tr>
+            <tr>
+                <th>Phương thức thanh toán</th>
+                <td>{{ fee.paymentMethod }}</td>
+            </tr>
+            <tr>
+                <th>Ngày đóng tiền</th>
+                <td>{{ fee.submissionDate ? fee.submissionDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Ghi chú</th>
+                <td>{{ fee.note }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_fee_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center" style="height: 100vh; align-items: flex-start; padding-top: 50px;">
+        <h2 class="text-center" style="font-size: 2rem; color: black;">
+        CHÀO MỪNG BẠN ĐẾN HỆ THỐNG QUẢN LÝ ĐOÀN VIÊN
+    </h2>
+</div>
+{% endblock %}
+
+
+{% block stylesheets %}
+<style>
+  html, body, #wrapper, #content-wrapper, #content {
+    height: 100%;
+    margin: 0;
+  }
+
+  #content-wrapper {
+    background-image: url('{{ asset('admin/img/nenDTNCS.png') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .custom-overlay {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .custom-overlay h1 {
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    color: white;
+  }
+</style>
+{% endblock %}

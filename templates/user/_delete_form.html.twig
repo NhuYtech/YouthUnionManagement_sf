@@ -1,0 +1,8 @@
+<form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" 
+      onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');"
+      class="d-inline-block">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+    <button class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i>Xóa
+    </button>
+</form>

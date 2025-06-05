@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Khen thưởng, kỷ luật{% endblock %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Nghiệp vụ Đoàn viên</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> <a href="{{ path('app_training_evaluation_index') }}">Khen thưởng/kỷ luật</a></li>
+    </ol>
+    
+    <h5><b style="color: black; text-align: center;">Danh sách khen thưởng/kỷ luật</b></h5>
+
+    {% if is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN') %}
+    <!--Nút thêm-->
+    <a href="{{ path('app_recognition_new') }}" class="btn btn-primary btn-sm shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i> Thêm
+    </a>
+    {% endif %}
+</div>
+
+<!-- BẢNG -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên đoàn viên</th>
+                        <th>Số QĐ</th>
+                        <th>Cấp khen thưởng</th>
+                        <th>Ngày hiệu lực</th>
+                        <th>Nội dung</th>
+                        <th>File đính kèm</th>
+                        <th>Trạng thái</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <th>Hành động</th>
+                        {% endif %}
+                        <th>Tiện ích</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recognition in recognitions %}
+                        <tr>
+                            <td>{{ recognition.id }}</td>
+                            <td>{{ recognition.user.fullName }}</td>
+                            <td>{{ recognition.decisionNumber }}</td>
+                            <td>{{ recognition.level }}</td>
+                            <td>{{ recognition.effectiveDate ? recognition.effectiveDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ recognition.reason }}</td>
+                            <td>
+                                {% if recognition.fileDecision %}
+                                    <a href="{{ asset('uploads/pdfs/' ~ recognition.fileDecision) }}" target="_blank">
+                                        <i class="fas fa-file-pdf text-danger"></i> Xem file
+                                    </a>
+                                {% else %}
+                                    ---
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if recognition.status == 'approved' %}
+                                    <span class="badge bg-success" style="color: white">Đã duyệt</span>
+                                {% elseif recognition.status == 'rejected' %}
+                                    <span class="badge bg-danger" style="color: white">Từ chối</span>
+                                {% elseif recognition.status == 'submitted' %}
+                                    <span class="badge bg-warning text-dark" style="color: white">Đã gửi</span>
+                                {% else %}
+                                    <span class="badge bg-secondary" style="color: white">Nháp</span>
+                                {% endif %}
+                            </td>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td class="text-center align-middle">
+                                    {% if recognition.status == 'submitted' or recognition.status == 'draft' %}
+                                        <form action="{{ path('app_recognition_update_status', {'id': recognition.id}) }}" method="post" class="d-flex flex-column align-items-center gap-1">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('update_status' ~ recognition.id) }}">
+                                            <button type="submit" name="status" value="approved"
+                                                class="btn btn-link p-0 text-success text-decoration-underline"
+                                                style="font-size: 0.875rem; background: none; border: none;">
+                                                Duyệt
+                                            </button>
+                                            <button type="submit" name="status" value="rejected"
+                                                class="btn btn-link p-0 text-danger text-decoration-underline"
+                                                style="font-size: 0.875rem; background: none; border: none;">
+                                                Từ chối
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-muted" style="font-size: 0.875rem; font-weight: bold;">Đã xử lý</span>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+
+                            <td>
+                                <div class="d-flex flex-column align-items-center">
+                                    <a href="{{ path('app_recognition_show', {'id': recognition.id}) }}"
+                                    class="btn btn-sm btn-primary mb-1"
+                                    title="Chi tiết">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </a>
+                                    {% if (recognition.status == 'submitted' or recognition.status == 'draft') and (is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN')) %}
+                                        <a href="{{ path('app_recognition_edit', {'id': recognition.id}) }}"
+                                        class="btn btn-sm btn-info"
+                                        title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

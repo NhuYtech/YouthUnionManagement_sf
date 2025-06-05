@@ -1,0 +1,18 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+
+app_login_check:
+  path: /login_check
+  methods: [POST]
+
+app_register:
+  path: /register
+  controller: App\Controller\AuthController::register
+
+app_profile_new:
+  path: /new
+  controller: App\Controller\ProfileController::new
+  methods: [GET, POST]

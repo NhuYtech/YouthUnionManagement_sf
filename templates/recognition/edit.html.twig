@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chỉnh sửa khen thưởng, kỷ luật{% endblock %}
+
+{% block content %}
+<h5><b style="color: black;">Chỉnh sửa khen thưởng, kỷ luật</b></h5>
+
+{{ form_start(form) }}
+
+{{ form_widget(form) }}
+
+<div class="d-flex mt-3">
+    <button class="btn btn-success btn-sm" style="margin-right: 10px;">
+        <i class="fas fa-save"></i> {{ button_label|default('Lưu') }}
+    </button>
+
+    <a href="{{ path('app_recognition_index') }}" class="btn btn-warning btn-sm">
+        Trở lại
+    </a>
+</div>
+
+{{ form_end(form) }}
+
+
+    
+{% endblock %}

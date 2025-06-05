@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thêm khen thưởng/Kỷ luật{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Nghiệp vụ Đoàn viên</a></li>
+    <li class="breadcrumb-item active" aria-current="page"> <a href="{{ path('app_training_evaluation_index') }}">Danh sách khen thưởng/kỷ luật</a></li>
+    <li class="breadcrumb-item active" aria-current="page"> <a href="{{ path('app_recognition_new') }}">Thêm khen thưởng, kỷ luật</a></li>
+</ol>
+
+<h5 style="display: block; text-align: center; color: black;"><b>Thêm Khen thưởng/Kỷ luật</b></h5>
+
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+<div class="row mt-3">
+    <div class="col-auto">
+        <button class="btn btn-success btn-sm">
+            <i class="fas fa-paper-plane"></i> {{ button_label|default('Gửi') }}
+        </button>
+    </div>
+    <div class="col-auto">
+        <a href="{{ path('app_recognition_index') }}" class="btn btn-warning btn-sm">Trở lại</a>
+    </div>
+</div>
+    {{ form_end(form) }}
+    
+{% endblock %}

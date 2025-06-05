@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Danh sách đoàn viên{% endblock %}
+
+{% block content %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+
+
+<div class="container-fluid px-0">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h5 class="mb-0"><b style="color: black;">Danh sách đoàn viên</b></h5>
+
+        <!-- Nút xuất -->
+        <a href="{{ path('export_users_excel', { 'unitName': unitName }) }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-download"></i> Xuất file
+        </a>
+    </div>
+</div>
+
+
+<!-- BẢNG -->
+<div class="card shadow mb-4">
+    <div class="card-body px-0">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Mã định danh</th>
+                        <th>Tên đơn vị</th>
+                        <th>Họ và tên</th>
+                        <th>Ngày sinh</th>
+                        <th>Giới tính</th>
+                        <th>Dân tộc</th>
+                        <th>Tôn giáo</th>
+                        <th>CMND/CCCD</th>
+                        <th>Ngày cấp</th>
+                        <th>Nơi cấp</th>
+                        <th>Quê quán</th>
+                        <th>Thường trú</th>
+                        <th>Nơi vào đoàn</th>
+                        <th>Ngày vào đoàn</th>
+                        <th>Chức vụ trong chi đoàn</th>
+                        <th>Hiệp hội</th>
+                        <th>Đoàn viên danh dự</th>
+                        <th>Ngày vào Đảng</th>
+                        <th>Chức vụ trong Đảng</th>
+                        <th>Có hưởng lương</th>
+                        <th>Sổ đoàn viên</th>
+                        <th>Trình độ học vấn</th>
+                        <th>Trình độ chuyên môn</th>
+                        <th>Trình độ chính trị</th>
+                        <th>Trình độ tin học</th>
+                        <th>Ngoại ngữ</th>
+                        <th>Nghề nghiệp hiện nay</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th>Tiện ích</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.unitName }}</td>
+                            <td>{{ user.fullName }}</td>
+                            <td>{{ user.dateOfBirth ? user.dateOfBirth|date('Y-m-d') : '' }}</td>
+                            <td>{{ user.gender }}</td>
+                            <td>{{ user.ethnicity }}</td>
+                            <td>{{ user.religion }}</td>
+                            <td>{{ user.citizenId }}</td>
+                            <td>{{ user.issueDate ? user.issueDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ user.placeOfIssue }}</td>
+                            <td>{{ user.hometownAddress }}</td>
+                            <td>{{ user.permanentAddress }}</td>
+                            <td>{{ user.joinPlace }}</td>
+                            <td>{{ user.joinDate ? user.joinDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ user.unionRole }}</td>
+                            <td>{{ user.association }}</td>
+                            <td>{{ user.honorMember }}</td>
+                            <td>{{ user.joinPartyDate ? user.joinPartyDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ user.partyPosition }}</td>
+                            <td>{{ user.salaryStatus ? 'Có' : 'Không' }}</td>
+                            <td>{{ user.unionBookNumber ? 'Có' : 'Không' }}</td>
+                            <td>{{ user.eduLevel }}</td>
+                            <td>{{ user.proLevel }}</td>
+                            <td>{{ user.polTheory }}</td>
+                            <td>{{ user.itLevel }}</td>
+                            <td>{{ user.langLevel }}</td>
+                            <td>{{ user.job }}  </td>
+                            <td>{{ user.phoneNumber }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <div class="d-flex flex-column align-items-center">
+                                    <a href="{{ path('app_user_show', {'id': user.id}) }}"
+                                       class="btn btn-sm btn-primary mb-1"
+                                       title="Chi tiết">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </a>
+                            
+                                    <a href="{{ path('app_user_edit', {'id': user.id}) }}"
+                                       class="btn btn-sm btn-info mb-1"
+                                       title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="17" class="text-center">Không có bản ghi nào</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

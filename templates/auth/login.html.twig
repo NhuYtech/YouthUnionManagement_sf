@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Đăng nhập</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('admin/img/logo.png') }}">
+
+    <!-- Custom fonts for this template-->
+    <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+        <!-- Custom styles for this template-->
+        <link href="{{ asset('admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+</head>
+
+<body style="background: url('{{ asset('admin/img/nen.png') }}') no-repeat center center fixed; background-size: cover;">
+    <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="card o-hidden border-0 shadow-lg p-4" style="width: 100%; max-width: 450px;">
+            <div class="text-center">
+                <img src="{{ asset('admin/img/yumm.png') }}" alt="Logo Đoàn" style="max-width: 220px; height: auto; margin-bottom: 20px;">
+                <h1 class="h6" style="font-weight: bold; color: black; margin-bottom: 1rem;">ĐĂNG NHẬP</h1>
+            </div>
+
+            {% if app.session.has('login_error') %}
+            <div class="alert alert-danger text-center">
+                {{ app.session.get('login_error') }}
+                {% do app.session.remove('login_error') %}
+            </div>
+            {% endif %}
+
+            <form class="user" method="POST" action="{{ path('app_login') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-user" name="email" placeholder="Nhập Email hoặc Số điện thoại" value="{{ last_username|default('') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" class="form-control form-control-user" name="password" placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <div class="form-group text-left">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                        <label class="custom-control-label" for="customCheck">Nhớ mật khẩu</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-user btn-block">Đăng nhập</button>
+                <hr>
+            </form>
+
+
+            <!-- Các liên kết dưới cùng -->
+            <div class="text-center">
+                <a href="{{ path('app_forgot_password') }}">Quên mật khẩu?</a>
+            </div>
+            <div class="text-center">
+                <a href="{{ path('app_register') }}">Tạo tài khoản mới!</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>

@@ -1,0 +1,125 @@
+security:
+  # hash mật khẩu trước khi lưu vào db
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
+
+  providers:
+    app_user_provider:
+      entity:
+        class: App\Entity\Account
+        property: email
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    main:
+      pattern: ^/
+      lazy: true
+      provider: app_user_provider
+      form_login:
+        login_path: app_login
+        check_path: app_login
+        username_parameter: identifier
+        password_parameter: password
+        default_target_path: /home
+        enable_csrf: true
+      logout:
+        path: app_logout
+        target: app_login
+        invalidate_session: true
+        delete_cookies:
+          REMEMBERME: ~
+
+      remember_me: #ghi nhớ đăng nhập
+        secret: "%kernel.secret%"
+        lifetime: 604800 # 7day
+        path: /
+      custom_authenticators:
+        - App\Security\CustomAuthenticator
+
+  role_hierarchy:
+    ROLE_ADMIN:
+      [
+        ROLE_USER,
+        ROLE_TRAINING_USER,
+        ROLE_DOCUMENT_USER,
+        ROLE_FEE_USER,
+        ROLE_EVENT_USER,
+        ROLE_SECRETARY,
+        ROLE_EVENT_ROLLCALL_USER,
+      ]
+
+    ROLE_SECRETARY:
+      [
+        ROLE_USER,
+        ROLE_USER_MANAGE,
+        ROLE_USER_ADD,
+        ROLE_TRAINING_USER,
+        ROLE_AWARD_DISCIPLINE_USER,
+        ROLE_DOCUMENT_USER,
+        ROLE_FEE_USER,
+        ROLE_EVENT_USER,
+        ROLE_EVENT_ROLLCALL_USER,
+      ]
+
+    ROLE_USER:
+      [
+        ROLE_TRAINING_USER,
+        ROLE_AWARD_DISCIPLINE_USER,
+        ROLE_DOCUMENT_USER,
+        ROLE_FEE_USER,
+        ROLE_EVENT_USER,
+        ROLE_EVENT_ROLLCALL_USER,
+      ]
+
+  access_control:
+    # đường dẫn công khai
+    - { path: ^/login$, roles: PUBLIC_ACCESS }
+    - { path: ^/logout$, roles: PUBLIC_ACCESS }
+    - { path: ^/register, roles: PUBLIC_ACCESS }
+    - { path: ^/forgot-password, roles: PUBLIC_ACCESS }
+    - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+
+    # admin
+    - { path: ^/user/user, roles: [ROLE_SECRETARY, ROLE_ADMIN] }
+    - { path: ^/union/admin, roles: [ROLE_ADMIN, IS_AUTHENTICATED_FULLY] }
+
+    # đường dẫn - SECRETARY
+    - { path: ^/secretary/management$, roles: ROLE_USER_MANAGE }
+    - { path: ^/secretary/management/create$, roles: ROLE_USER_ADD }
+    - { path: ^/training/evaluation$, roles: ROLE_TRAINING_USER }
+    - { path: ^/recognition$, roles: ROLE_AWARD_DISCIPLINE_USER }
+    - { path: ^/instruction/document$, roles: ROLE_DOCUMENT_USER }
+    - { path: ^/fee$, roles: ROLE_FEE_USER }
+    - { path: ^/event/roll/call$, roles: ROLE_EVENT_ROLLCALL_USER }
+    - { path: ^/event$, roles: ROLE_EVENT_USER }
+
+    # Đường dẫn yêu cầu xác thực - USER
+    - { path: ^/training-evaluation, roles: ROLE_USER }
+    - { path: ^/instruction-document, roles: ROLE_USER }
+    - { path: ^/fee, roles: ROLE_USER }
+    - { path: ^/event/roll/call$, roles: ROLE_EVENT_ROLLCALL_USER }
+    - { path: ^/event, roles: ROLE_USER }
+    - { path: ^/profile, roles: ROLE_USER }
+
+      # Cung cấp quyền tạo, chỉnh sửa và xóa điểm danh cho ADMIN và SECRETARY
+    - { path: ^/event/roll/call/new$, roles: [ROLE_ADMIN, ROLE_SECRETARY] }
+    - { path: ^/event/roll/call/\d+/edit$, roles: [ROLE_ADMIN, ROLE_SECRETARY] }
+    - {
+        path: ^/event/roll/call/\d+/delete$,
+        roles: [ROLE_ADMIN, ROLE_SECRETARY],
+      }
+
+    # Đoàn viên chỉ có thể xem điểm danh (với quyền ROLE_EVENT_ROLLCALL_USER)
+    - { path: ^/event/roll/call$, roles: [ROLE_EVENT_ROLLCALL_USER] }
+
+    - { path: ^/secretary, roles: ROLE_SECRETARY }
+    - { path: ^/dashboard, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/, roles: ROLE_USER }
+
+when@test:
+  security:
+    password_hashers:
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"

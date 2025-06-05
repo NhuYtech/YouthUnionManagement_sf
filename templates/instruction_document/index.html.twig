@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Văn bản chỉ đạo{% endblock %}
+
+{% block content %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+    <h5><b style="color: black;">Văn bản chỉ đạo</b></h5>
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <!--Nút thêm-->
+    <a href="{{ path('app_instruction_document_new') }}" class="btn btn-primary btn-sm shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i> Thêm
+    </a>
+    {% endif %}
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Mã</th>
+                        <th>Tên văn bản</th>
+                        <th>Loại văn bản</th>
+                        <th>Đơn vị ban hành</th>
+                        <th>Ngày ban hành</th>
+                        <th>Nội dung ban hành</th>
+                        <th>Trạng thái</th>
+                        <th>File đính kèm</th>
+                        <th>Tiện ích</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for instruction_document in instruction_documents %}
+                    <tr>
+                        <td>{{ instruction_document.id }}</td>
+                        <td>{{ instruction_document.title }}</td>
+                        <td>{{ instruction_document.type }}</td>
+                        <td>{{ instruction_document.unitName }}</td>
+                        <td>{{ instruction_document.issueDate ? instruction_document.issueDate|date('Y-m-d') : '' }}</td>
+                        <td>{{ instruction_document.content }}</td>
+                        <td>{{ instruction_document.status }}</td>
+                        <td>
+                            {% if instruction_document.attachment %}
+                            <a href="{{ asset('uploads/pdfs/' ~ instruction_document.attachment) }}" target="_blank">
+                                <i class="fas fa-file-pdf text-danger"></i> Xem file
+                            </a>
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-center">
+                                <a href="{{ path('app_instruction_document_show', {'id': instruction_document.id}) }}"
+                                   class="btn btn-sm btn-primary mb-1"
+                                   title="Chi tiết">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_instruction_document_edit', {'id': instruction_document.id}) }}"
+                                   class="btn btn-sm btn-info"
+                                   title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center">Không có dữ liệu</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

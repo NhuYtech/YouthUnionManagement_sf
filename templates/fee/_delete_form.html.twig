@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_fee_delete', {'id': fee.id}) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fee.id) }}">
+    <button class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Xóa
+    </button>
+</form>

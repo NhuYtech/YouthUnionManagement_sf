@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chỉnh sửa điểm danh hoạt động{% endblock %}
+
+{% block content %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+    <h5><b style="color: black;">Chỉnh sửa điểm danh</b></h5>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="row mt-3">
+        <div class="col-auto">
+            <button class="btn btn-success btn-sm">
+                <i class="fas fa-save"></i> {{ button_label|default('Lưu') }}
+            </button>
+        </div>
+        <div class="col-auto">
+            <a href="{{ path('app_event_roll_call_index') }}" class="btn btn-warning btn-sm">Trở lại</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

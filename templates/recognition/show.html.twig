@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Khen thưởng/Kỷ luật{% endblock %}
+
+{% block content %}
+<h5><b style="color: black;">Chi tiết khen thưởng/kỷ luật</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>STT</th>
+                <td>{{ recognition.id }}</td>
+            </tr>
+            <tr>
+                <th>Số QĐ</th>
+                <td>{{ recognition.decisionNumber }}</td>
+            </tr>
+            <tr>
+                <th>Cấp khen thưởng</th>
+                <td>{{ recognition.level }}</td>
+            </tr>
+            <tr>
+                <th>Ngày hiệu lực</th>
+                <td>{{ recognition.effectiveDate ? recognition.effectiveDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nội dung</th>
+                <td>{{ recognition.reason }}</td>
+            </tr>
+            <tr>
+                <th>File đính kèm</th>
+                <td>{{ recognition.fileDecision }}</td>
+            </tr>
+            <tr>
+                <th>Trạng thái</th>
+                <td>{{ recognition.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_recognition_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+
+
+{% endblock %}

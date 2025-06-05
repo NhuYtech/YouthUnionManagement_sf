@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết đoàn viên{% endblock %}
+
+{% block content %}
+<h5><b style="color: black;">Chi tiết đoàn viên</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Mã đoàn viên</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Họ và tên</th>
+                <td>{{ user.fullName }}</td>
+            </tr>
+            <tr>
+                <th>Giới tính</th>
+                <td>{{ user.gender }}</td>
+            </tr>
+            <tr>
+                <th>Ngày sinh</th>
+                <td>{{ user.dateOfBirth ? user.dateOfBirth|date('d/m/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Dân tộc</th>
+                <td>{{ user.ethnicity }}</td>
+            </tr>
+            <tr>
+                <th>Tôn giáo</th>
+                <td>{{ user.religion }}</td>
+            </tr>
+            <tr>
+                <th>CCCD</th>
+                <td>{{ user.citizenId }}</td>
+            </tr>
+            <tr>
+                <th>Ngày cấp</th>
+                <td>{{ user.issueDate ? user.issueDate|date('d/m/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nơi cấp</th>
+                <td>{{ user.placeOfIssue }}</td>
+            </tr>
+            <tr>
+                <th>Quê quán</th>
+                <td>{{ user.hometownAddress }}</td>
+            </tr>
+            <tr>
+                <th>Địa chỉ thường trú</th>
+                <td>{{ user.permanentAddress }}</td>
+            </tr>
+            <tr>
+                <th>Đơn vị</th>
+                <td>{{ user.unitName }}</td>
+            </tr>
+            <tr>
+                <th>Mã sổ đoàn</th>
+                <td>{{ user.regisNumber }}</td>
+            </tr>
+            <tr>
+                <th>Ngày vào Đoàn</th>
+                <td>{{ user.joinDate ? user.joinDate|date('d/m/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nơi vào Đoàn</th>
+                <td>{{ user.joinPlace }}</td>
+            </tr>
+            <tr>
+                <th>Nơi cấp thẻ đoàn</th>
+                <td>{{ user.cardPlace }}</td>
+            </tr>
+            <tr>
+                <th>Chức vụ Đoàn</th>
+                <td>{{ user.unionRole }}</td>
+            </tr>
+            <tr>
+                <th>Số sổ Đoàn</th>
+                <td>{{ user.unionBookNumber ? 'Có' : 'Không' }}</td>
+            </tr>
+            <tr>
+                <th>Trình độ học vấn</th>
+                <td>{{ user.eduLevel }}</td>
+            </tr>
+            <tr>
+                <th>Nghề nghiệp</th>
+                <td>{{ user.job }}</td>
+            </tr>
+            <tr>
+                <th>Số điện thoại</th>
+                <td>{{ user.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_user_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

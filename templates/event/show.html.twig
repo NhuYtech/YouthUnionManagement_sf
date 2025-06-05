@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết hoạt động{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_index') }}">Hoạt động đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+        <a href="{{ path('app_event_show', {'id': event.id}) }}">Chi tiết hoạt động</a>
+    </li>
+</ol>   
+<h5><b style="color: black;">Chi tiết hoạt động</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>STT</th>
+                <td>{{ event.id }}</td>
+            </tr>
+            <tr>
+                <th>Tên hoạt động</th>
+                <td>{{ event.eventName }}</td>
+            </tr>
+            <tr>
+                <th>Loại hoạt động</th>
+                <td>{{ event.eventType }}</td>
+            </tr>
+            <tr>
+                <th>Cấp tổ chức</th>
+                <td>{{ event.organizationLevel }}</td>
+            </tr>
+            <tr>
+                <th>Ngày bắt đầu</th>
+                <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Ngày kết thúc</th>
+                <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Địa điểm</th>
+                <td>{{ event.location }}</td>
+            </tr>
+            <tr>
+                <th>Hình ảnh</th>
+                <td>
+                    {% if event.image %}
+                        <img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Hình ảnh hoạt động" width="150">
+                    {% else %}
+                        Không có ảnh
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Mô tả</th>
+                <td>{{ event.description }}</td>
+            </tr>
+            <tr>
+                <th>Thời gian điểm danh</th>
+                <td>{{ event.rollCallTime ? event.rollCallTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Giới hạn người tham gia</th>
+                <td>{{ event.participantLimit }}</td>
+            </tr>
+            <tr>
+                <th>File đính kèm</th>
+                <td>
+                    {% if event.pdfFileName %}
+                    <a href="{{ asset('uploads/pdfs/' ~ event.pdfFileName) }}" target="_blank">Tải xuống</a>
+                    {% else %}
+                        Không có file
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Đăng ký tham gia</th>
+                <td>
+                    {% if event.registerLink %}
+                        <a href="{{ event.registerLink }}" target="_blank">{{ event.registerLink }}</a>
+                    {% else %}
+                        Không có
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Trạng thái</th>
+                <td>{{ event.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_event_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thêm đoàn phí{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_index') }}">Đoàn phí</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_new') }}">Thêm đoàn phí</a></li>
+</ol>
+
+<h5 style="display: block; text-align: center; color: black;"><b>Thêm đoàn phí</b></h5>
+
+{% for message in app.flashes('error') %}
+<div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{{ form_start(form) }}
+{{ form_row(form.unitName) }}
+{{ form_row(form.user) }}
+{{ form_row(form.memberCount) }}
+{{ form_row(form.amount) }}
+<div class="mb-3">
+    {{ form_label(form.paymentMethod) }}
+    {{ form_widget(form.paymentMethod, {'attr': {'id': 'paymentMethod', 'class': 'form-control'}}) }}
+    {{ form_errors(form.paymentMethod) }}
+</div>
+
+{{ form_row(form.paymentDate) }}
+{{ form_row(form.note) }}
+
+
+<div class="row mt-3">
+    <div class="col-auto">
+        <button class="btn btn-success btn-sm">
+            <i class="fas fa-paper-plane"></i> {{ button_label|default('Gửi') }}
+        </button>
+    </div>
+    <div class="col-auto">
+        <a href="{{ path('app_fee_index') }}" class="btn btn-warning btn-sm">Trở lại</a>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const memberCountInput = document.getElementById('fee_memberCount');
+    const amountInput = document.getElementById('fee_amount');
+    if (memberCountInput && amountInput) {
+        memberCountInput.setAttribute('min', '1');
+        memberCountInput.setAttribute('type', 'number');
+        memberCountInput.classList.add('form-control');
+        amountInput.classList.add('form-control');
+        amountInput.setAttribute('readonly', 'readonly');
+        amountInput.style.backgroundColor = '#f8f9fa';
+        function updateAmount() {
+            let memberCount = memberCountInput.value ? parseInt(memberCountInput.value) : 0;
+            const totalBeforeSplit = memberCount * 12 * 2;
+            const totalAmount = Math.round(totalBeforeSplit / 3);
+            amountInput.value = totalAmount;}
+        memberCountInput.addEventListener('input', updateAmount);
+        memberCountInput.addEventListener('change', function() {
+            const value = parseInt(this.value);
+            if (isNaN(value) || value <= 0) {
+                this.value = "";
+                updateAmount();
+            }
+        });
+        setTimeout(updateAmount, 100);
+    }
+});
+</script>
+
+
+
+{% endblock %}

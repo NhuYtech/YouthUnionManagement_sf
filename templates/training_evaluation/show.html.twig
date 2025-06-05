@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết Khen thưởng/Kỷ luật{% endblock %}
+
+{% block content %}
+<h5><b style="color: black;">Chi tiết đánh giá, xếp loại</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>STT</th>
+                <td>{{ training_evaluation.id }}</td>
+            </tr>
+            <tr>
+                <th>Họ và tên</th>
+                <td>
+                    {% if training_evaluation.user %}
+                        {{ training_evaluation.user.fullName }}
+                    {% else %}
+                        Không xác định
+                    {% endif %}
+                </td>                
+            </tr>
+            <tr>
+                <th>Ưu điểm</th>
+                <td>{{ training_evaluation.strengths }}</td>
+            </tr>
+            <tr>
+                <th>Khuyết điểm</th>
+                <td>{{ training_evaluation.weaknesses }}</td>
+            </tr>
+            <tr>
+                <th>Khen thưởng</th>
+                <td>{{ training_evaluation.reward }}</td>
+            </tr>
+            <tr>
+                <th>Kỷ luật</th>
+                <td>{{ training_evaluation.discipline }}</td>
+            </tr>
+            <tr>
+                <th>Đánh giá</th>
+                <td>{{ training_evaluation.finalEvaluate }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_training_evaluation_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kết nạp đoàn viên{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Nghiệp vụ Đoàn viên</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('app_user_new') }}">Kết nạp đoàn viên mới</a></li>
+</ol>
+<h5 style="color: black; text-align: center;"><b>Kết nạp đoàn viên mới</b></h5>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="row mt-3">
+            <div class="col-auto">
+                <button class="btn btn-success btn-sm">
+                    <i class="fas fa-save"></i> {{ button_label|default('Lưu') }}
+                </button>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_user_index') }}" class="btn btn-warning btn-sm">Trở lại</a>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
+{% endblock %}

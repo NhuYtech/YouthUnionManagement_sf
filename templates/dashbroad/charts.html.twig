@@ -1,0 +1,190 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thống kê{% endblock %}
+
+{% block stylesheets %}
+    <!-- Custom styles for this page -->
+    <link href="{{ asset('admin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <!-- Thêm CSS cho sidebar -->
+    <link href="{{ asset('admin/css/sb-admin-2.min.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+  {% block content %}
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+
+          <!-- Main Content -->
+          <div id="content">
+              <!-- Begin Page Content -->
+              <div class="container-fluid">
+                  <!-- Page Heading -->
+                  <div class="d-flex justify-content-center mb-4">
+                    <h4><b style="color: black;">Dashbroad</b></h4>
+                  </div>
+                  <!-- Content Row -->
+                  <div class="row">
+                    <div class="col-12">
+                          <!-- Hoạt động đoàn -->
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3">
+                                  <h6 class="m-0 font-weight-bold text-primary">Thống kê hoạt động đoàn</h6>
+                              </div>
+                              <div class="card-body">
+                                  <div class="chart-bar">
+                                      <canvas id="myBarChart"></canvas>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- /.container-fluid -->
+          </div>
+          <!-- End of Main Content -->
+      </div>
+      <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{{ asset('admin/js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('admin/js/demo/chart-bar-demo.js') }}"></script>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('admin/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hiển thị loading
+            const ctx = document.getElementById('myBarChart').getContext('2d');
+            
+            fetch('/api/statistics/events-per-month')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Không thể kết nối với API');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Khởi tạo mảng dữ liệu cho 12 tháng
+                const fullData = Array.from({length: 12}, (_, i) => {
+                    // Tìm dữ liệu cho tháng i+1 nếu có
+                    const monthData = data.find(item => item.month === i+1);
+                    // Nếu không có dữ liệu cho tháng này, trả về 0
+                    return monthData ? monthData.count : 0;
+                });
+                
+                // Tạo labels cho 12 tháng
+                const months = Array.from({length: 12}, (_, i) => `Tháng ${i+1}`);
+                
+                // Vẽ biểu đồ cột
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Tổng số hoạt động',
+                            data: fullData,
+                            backgroundColor: 'rgba(78, 115, 223, 0.5)',
+                            borderColor: 'rgba(78, 115, 223, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 25,
+                                top: 25,
+                                bottom: 0
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                min: 0,
+                                max: 50,
+                                ticks: {
+                                    beginAtZero: true,
+                                    precision: 0,
+                                    padding: 10
+                                },
+                                grid: {
+                                    color: "rgb(234, 236, 244)",
+                                    zeroLineColor: "rgb(234, 236, 244)",
+                                    drawBorder: false,
+                                    borderDash: [2],
+                                    zeroLineBorderDash: [2]
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                backgroundColor: "rgb(255,255,255)",
+                                bodyFontColor: "#858796",
+                                titleMarginBottom: 10,
+                                titleFontColor: '#6e707e',
+                                titleFontSize: 14,
+                                borderColor: '#dddfeb',
+                                borderWidth: 1,
+                                xPadding: 15,
+                                yPadding: 15,
+                                displayColors: false,
+                                intersect: false,
+                                mode: 'index',
+                                caretPadding: 10,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += context.parsed.y + ' hoạt động';
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Hiển thị thông báo lỗi trong vùng biểu đồ
+                document.querySelector('.chart-bar').innerHTML = '<div class="text-center text-danger mt-4 mb-4">Không thể tải dữ liệu biểu đồ. Vui lòng thử lại sau.</div>';
+            });
+        });
+    </script>
+
+{% endblock %}

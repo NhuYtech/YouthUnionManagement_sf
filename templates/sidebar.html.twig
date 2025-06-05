@@ -1,0 +1,171 @@
+<!-- Sidebar -->
+<ul class="navbar-nav sidebar accordion custom-sidebar" id="accordionSidebar">
+
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" >
+        <div class="sidebar-brand-icon">
+            <img src="{{ asset('admin/img/avt.png') }}"
+            alt="User Avatar"
+            class="rounded-circle"
+            width="40"
+            height="40"
+            style="object-fit: cover;">
+        </div>
+        <div class="sidebar-brand-text mx-3" style="font-size: 13px;">
+            {{ app.user.fullName|default('Guest') }}
+        </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    
+    <!-- Trang chủ -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_home') }}">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+    </li>
+
+    <!-- Heading -->
+    <div class="sidebar-heading">THÔNG TIN CHUNG</div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <!-- Thống kê -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_charts') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Thống kê</span>
+        </a>
+    </li>
+    {% endif %}
+
+
+    {% if is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN') %}
+    <!-- Danh sách đoàn viên chỉ hiển thị với Bí thư và Admin -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ path('app_user_index') }}" data-toggle="collapse" data-target="#collapseDanhSach"
+        aria-expanded="true" aria-controls="collapseDanhSach">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Danh sách Đoàn viên</span>
+        </a>
+
+        <div id="collapseDanhSach" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {% if is_granted('ROLE_ADMIN') %}
+                <a class="collapse-item" href="{{ path('app_user_index', { 'unitName': 'Hệ thống thông tin 2022' }) }}">Hệ thống thông tin 2022</a>
+                <a class="collapse-item" href="{{ path('app_user_index', { 'unitName': 'Công nghệ thông tin 2022' }) }}">Công nghệ thông tin 2022</a>
+                <a class="collapse-item" href="{{ path('app_user_index', { 'unitName': 'Khoa học dữ liệu 2022' }) }}">Khoa học dữ liệu 2022</a>
+                <a class="collapse-item" href="{{ path('app_user_index', { 'unitName': 'Khoa học máy tính 2022' }) }}">Khoa học máy tính 2022</a>
+                <a class="collapse-item" href="{{ path('app_user_index', { 'unitName': 'Kỹ thuật phần mềm 2022' }) }}">Kỹ thuật phần mềm 2022</a>
+            {% else %}
+                <a class="collapse-item" href="{{ path('app_user_index') }}">Thông tin Đoàn viên</a>
+            {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endif %}
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+{% if is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN') %}
+<!-- QUẢN LÝ ĐOÀN VIÊN -->
+<div class="sidebar-heading">QUẢN LÝ ĐOÀN VIÊN</div>
+
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNghiepVu"
+       aria-expanded="true" aria-controls="collapseNghiepVu">
+        <i class="fas fa-tasks"></i>
+        <span>Nghiệp vụ Đoàn viên</span>
+    </a>
+    <div id="collapseNghiepVu" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+
+            {% if is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN') %}
+                <a class="collapse-item" href="{{ path('app_user_new') }}">Kết nạp đoàn viên mới</a>
+            {% endif %}
+
+            <!-- Đây là item chính "Đánh giá, xếp loại" -->
+            <a class="collapse-item collapsed" href="#" data-toggle="collapse" data-target="#collapseDanhGia"
+               aria-expanded="false" aria-controls="collapseDanhGia">
+                Đánh giá, xếp loại
+            </a>
+            <div id="collapseDanhGia" class="collapse" data-parent="#collapseNghiepVu">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index', { 'unitName': 'Hệ thống thông tin 2022' }) }}">Hệ thống thông tin 2022</a>
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index', { 'unitName': 'Công nghệ thông tin 2022' }) }}">Công nghệ thông tin 2022</a>
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index', { 'unitName': 'Khoa học dữ liệu 2022' }) }}">Khoa học dữ liệu 2022</a>
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index', { 'unitName': 'Khoa học máy tính 2022' }) }}">Khoa học máy tính 2022</a>
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index', { 'unitName': 'Kỹ thuật phần mềm 2022' }) }}">Kỹ thuật phần mềm 2022</a>
+                    {% else %}
+                        <a class="collapse-item" href="{{ path('app_training_evaluation_index') }}">Chi đoàn</a>
+                    {% endif %}
+                </div>
+            </div>
+<!-- Khen thưởng, kỷ luật -->
+            <a class="collapse-item collapsed" href="#" data-toggle="collapse" data-target="#collapseKhenThuong"
+               aria-expanded="false" aria-controls="collapseKhenThuong">
+                Khen thưởng, kỷ luật
+            </a>
+            <div id="collapseKhenThuong" class="collapse" data-parent="#collapseNghiepVu">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="collapse-item" href="{{ path('app_recognition_index', { 'unitName': 'Hệ thống thông tin 2022' }) }}">Hệ thống thông tin 2022</a>
+                        <a class="collapse-item" href="{{ path('app_recognition_index', { 'unitName': 'Công nghệ thông tin 2022' }) }}">Công nghệ thông tin 2022</a>
+                        <a class="collapse-item" href="{{ path('app_recognition_index', { 'unitName': 'Khoa học dữ liệu 2022' }) }}">Khoa học dữ liệu 2022</a>
+                        <a class="collapse-item" href="{{ path('app_recognition_index', { 'unitName': 'Khoa học máy tính 2022' }) }}">Khoa học máy tính 2022</a>
+                        <a class="collapse-item" href="{{ path('app_recognition_index', { 'unitName': 'Kỹ thuật phần mềm 2022' }) }}">Kỹ thuật phần mềm 2022</a>
+                    {% else %}
+                        <a class="collapse-item" href="{{ path('app_recognition_index') }}">Chi đoàn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+    <!-- Văn bản chỉ đạo -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_instruction_document_index') }}">
+            <i class="fas fa-file-alt"></i>
+            <span>Văn bản chỉ đạo</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- TIỆN ÍCH -->
+    <div class="sidebar-heading">TIỆN ÍCH</div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSinhHoat"
+           aria-expanded="true" aria-controls="collapseSinhHoat">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Sinh hoạt Đoàn</span>
+        </a>
+        <div id="collapseSinhHoat" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ path('app_fee_index') }}">Đoàn phí</a>
+                <a class="collapse-item" href="{{ path('app_event_roll_call_index') }}">Điểm danh</a>
+                <a class="collapse-item" href="{{ path('app_event_index') }}">Hoạt động đoàn</a>
+            </div>
+        </div>
+    </li>
+    
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<!-- End of Sidebar -->

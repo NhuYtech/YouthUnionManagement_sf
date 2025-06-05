@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Đoàn phí{% endblock %}
+
+{% block content %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Sinh hoạt đoàn</li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_index') }}">Đoàn phí</li></a>
+    </ol>
+
+    <h5><b style="color: black; text-align: center;">Đoàn phí</b></h5>
+    <!--Nút thêm-->
+    {% if is_granted('ROLE_SECRETARY') or is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('app_fee_new') }}" class="btn btn-primary btn-sm shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i>Thêm
+    </a>
+{% endif %}
+</div>
+
+<!-- BẢNG -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên đơn vị</th>
+                        <th>Họ tên người đóng</th>
+                        <th>Số đoàn viên</th>
+                        <th>Tổng tiền</th>
+                        <th>Phương thức thanh toán</th>
+                        <th>Trạng thái</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <th>Ngày đóng tiền</th>
+                        <th>Ghi chú</th>
+                        <th>Hành động</th>
+                        <th>Tiện ích</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fee in fees %}
+                        <tr>
+                            <td>{{ fee.id }}</td>
+                            <td>{{ fee.user.unitName }}</td>
+                            <td>{{ fee.user.fullName }}</td>
+                            <td>{{ fee.memberCount }}</td>
+                            <td>{{ fee.amount }}</td>
+                            <td>{{ fee.paymentMethod }}</td>
+                            <td>
+                                {% if fee.status == 'approved' %}
+                                    <span class="badge bg-success" style="color: white">Đã duyệt</span>
+                                {% elseif fee.status == 'rejected' %}
+                                    <span class="badge bg-danger" style="color: white">Từ chối</span>
+                                {% elseif fee.status == 'submitted' %}
+                                    <span class="badge bg-warning text-dark" style="color: white">Đã gửi</span>
+                                {% else %}
+                                    <span class="badge bg-secondary" style="color: white">Nháp</span>
+                                {% endif %}
+                            </td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <td>{{ fee.paymentDate ? fee.paymentDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ fee.note }}</td>
+                            <td class="text-center align-middle">
+                                {% if fee.status == 'submitted' or fee.status == 'draft' %}
+                                    <form action="{{ path('app_fee_update_status', {'id': fee.id}) }}" method="post" class="d-flex flex-column align-items-center gap-1">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('update_status' ~ fee.id) }}">
+                            
+                                        <button type="submit" name="status" value="approved"
+                                            class="btn btn-link p-0 text-success text-decoration-underline"
+                                            style="font-size: 0.875rem; background: none; border: none;">
+                                            Duyệt
+                                        </button>
+                                        <button type="submit" name="status" value="rejected"
+                                            class="btn btn-link p-0 text-danger text-decoration-underline"
+                                            style="font-size: 0.875rem; background: none; border: none;">
+                                            Từ chối
+                                        </button>
+                                    </form>
+                                {% else %}
+                                <span class="text-muted" style="font-size: 0.875rem; font-weight: bold;">
+                                    Đã xử lý
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column align-items-center">
+                                    <a href="{{ path('app_fee_show', {'id': fee.id}) }}"
+                                    class="btn btn-sm btn-primary mb-1"
+                                    title="Chi tiết">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </a>
+
+                                    {% if fee.status == 'submitted' or fee.status == 'draft' %}
+                                    <a href="{{ path('app_fee_edit', {'id': fee.id}) }}"
+                                    class="btn btn-sm btn-info"
+                                    title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết văn bản chỉ đạo{% endblock %}
+
+{% block content %}
+<h5><b style="color: black;">Chi tiết văn bản chỉ đạo</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Mã</th>
+                <td>{{ instruction_document.id }}</td>
+            </tr>
+            <tr>
+                <th>Tên văn bản</th>
+                <td>{{ instruction_document.title }}</td>
+            </tr>
+            <tr>
+                <th>Loại văn bản</th>
+                <td>{{ instruction_document.type }}</td>
+            </tr>
+            <tr>
+                <th>Đơn vị ban hành</th>
+                <td>{{ instruction_document.unitName }}</td>
+            </tr>
+            <tr>
+                <th>Ngày ban hành</th>
+                <td>{{ instruction_document.issueDate ? instruction_document.issueDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nội dung ban hành</th>
+                <td>{{ instruction_document.content }}</td>
+            </tr>
+            <tr>
+                <th>Trang thái</th>
+                <td>{{ instruction_document.status }}</td>
+            </tr>
+            <tr>
+                <th>File đính kèm</th>
+                <td>{{ instruction_document.attachment ? instruction_document.attachment|json_encode : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_instruction_document_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chi tiết điểm danh hoạt{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Sinh hoạt đoàn</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('app_event_roll_call_index') }}">Điểm danh</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+    <a href="{{ path('app_event_roll_call_show', {'id': event_roll_call.id}) }}">Chi tiết điểm danh</a>
+</li>
+
+</ol>
+
+<h5><b style="color: black; text-align: center;">Chi tiết điểm danh</b></h5>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Mã điểm danh</th>
+                <td>{{ event_roll_call.id }}</td>
+            </tr>
+            <tr>
+                <th>Mã sự kiện</th>
+                <td>{{ event_roll_call.event.id }}</td>
+            </tr>
+            <tr>
+                <th>Thời gian bắt đầu điểm danh</th>
+                <td>{{ event_roll_call.startTime ? event_roll_call.startTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Thời gian kết thúc điểm danh</th>
+                <td>{{ event_roll_call.endTime ? event_roll_call.endTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Link điểm danh</th>
+                <td>{{ event_roll_call.rollCallLink }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="row mt-3">
+        <div class="col-auto">
+            <a href="{{ path('app_event_roll_call_index') }}" class="btn btn-secondary btn-sm">Trở lại
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

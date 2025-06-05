@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thông tin cá nhân{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-0">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h5 class="mb-0"><b style="color: black;">Thông tin cá nhân</b></h5>
+    </div>
+</div>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% if form is defined %}
+    {{ form_start(form) }}
+
+    {{ form_row(form.unitName) }}
+    {{ form_row(form.fullName) }}
+    {{ form_row(form.dateOfBirth) }}
+    {{ form_row(form.gender) }}
+    {{ form_row(form.ethnicity) }}
+    {{ form_row(form.religion) }}
+    {{ form_row(form.citizenId) }}
+    {{ form_row(form.issueDate) }}
+    {{ form_row(form.placeOfIssue) }}
+    {{ form_row(form.hometownAddress) }}
+    {{ form_row(form.permanentAddress) }}
+    {{ form_row(form.joinPlace) }}
+    {{ form_row(form.joinDate) }}
+    {{ form_row(form.unionRole) }}
+    {{ form_row(form.association) }}
+    {{ form_row(form.honorMember) }}
+    {{ form_row(form.joinPartyDate) }}
+    {{ form_row(form.partyPosition) }}
+    {{ form_row(form.salaryStatus) }}
+    {{ form_row(form.unionBookNumber) }}
+    {{ form_row(form.eduLevel) }}
+    {{ form_row(form.proLevel) }}
+    {{ form_row(form.polTheory) }}
+    {{ form_row(form.itLevel) }}
+    {{ form_row(form.langLevel) }}
+    {{ form_row(form.job) }}
+    {{ form_row(form.phoneNumber) }}
+    {{ form_row(form.email) }}
+
+    <div class="row mt-3">
+        <div class="col-auto">
+            <button class="btn btn-success btn-sm">
+                <i class="fas fa-save"></i> {{ button_label|default('Lưu') }}
+            </button>
+        </div>
+    </div>
+{% else %}
+    <p>Form không hợp lệ hoặc không tồn tại.</p>
+{% endif %}
+
+{% endblock %}
+
