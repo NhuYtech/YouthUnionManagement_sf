@@ -99,8 +99,8 @@ Hệ thống được xây dựng nhằm hỗ trợ công tác quản lý đoàn
 - 👩‍💻 Sinh viên: **Huỳnh Như Ý** – HTTT2211015  
 - 📞 Hotline: 0982 147 252  
 - 📧 Email: hnyhttt2211015@student.ctuet.edu.vn  
-- 🔗 GitHub: [https://github.com/NhuYsea](https://github.com/NhuYtech)
+- 🔗 GitHub: [https://github.com/NhuYtech](https://github.com/NhuYtech)
 
   ---
   💻 *Source code hiện đang được phát triển và cập nhật thường xuyên tại:*  
-🔗 [https://github.com/NhuYsea/ThienAnFuni_aspnet](https://github.com/NhuYtech/YouthUnionManagement_sf)
+🔗 [https://github.com/NhuYtech/ThienAnFuni_aspnet](https://github.com/NhuYtech/YouthUnionManagement_sf)
